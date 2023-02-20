@@ -1,6 +1,6 @@
 import { hash } from "bcrypt";
 import { inject, injectable } from "tsyringe";
-import { AppError } from "../../../../errors/AppError";
+import { AppError } from "../../../../shared/errors/AppError";
 import {
   ICreateUserDTO,
   IUsersRepository,
@@ -10,7 +10,7 @@ import {
 export class CreateUserUseCase {
   constructor(
     @inject("UsersRepository") private usersRepository: IUsersRepository
-  ) {}
+  ) { }
 
   async execute({ name, email, password, driver_license }: ICreateUserDTO) {
     const userAlreadyExists = await this.usersRepository.findByEmail(email);

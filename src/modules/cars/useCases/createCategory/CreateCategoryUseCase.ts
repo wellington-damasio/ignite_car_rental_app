@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { AppError } from "../../../../errors/AppError";
+import { AppError } from "../../../../shared/errors/AppError";
 
 import { ICategoriesRepository } from "../../repositories/interfaces/ICategoriesRepository";
 
@@ -13,7 +13,7 @@ export class CreateCategoryUseCase {
   constructor(
     @inject("CategoriesRepository")
     private categoriesRepository: ICategoriesRepository
-  ) {}
+  ) { }
 
   async execute({ name, description }: IRequest): Promise<boolean> {
     const categoryExists = await this.categoriesRepository.findByName(name);

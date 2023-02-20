@@ -2,7 +2,7 @@ import { compare } from "bcrypt";
 import { inject, injectable } from "tsyringe";
 import { IUsersRepository } from "../../repositories/interfaces/IUsersRepository";
 import { sign } from "jsonwebtoken";
-import { AppError } from "../../../../errors/AppError";
+import { AppError } from "../../../../shared/errors/AppError";
 
 interface IRequest {
   email: string;
@@ -21,7 +21,7 @@ interface IResponse {
 export class AuthenticateUserUseCase {
   constructor(
     @inject("UsersRepository") private usersRepository: IUsersRepository
-  ) {}
+  ) { }
 
   async execute({ email, password }: IRequest): Promise<IResponse | false> {
     const user = await this.usersRepository.findByEmail(email);

@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
-import { AppError } from "../../../../errors/AppError";
-import { Category } from "../../entities/Category";
+import { AppError } from "../../../../shared/errors/AppError";
+import { Category } from "../../infra/typeorm/entities/Category";
 import { ICategoriesRepository } from "../../repositories/interfaces/ICategoriesRepository";
 
 @injectable()
@@ -8,7 +8,7 @@ export class FindCategoryByIdUseCase {
   constructor(
     @inject("CategoriesRepository")
     private categoriesRepository: ICategoriesRepository
-  ) {}
+  ) { }
 
   async execute(id: string): Promise<Category | false> {
     const category = await this.categoriesRepository.findById(id);
