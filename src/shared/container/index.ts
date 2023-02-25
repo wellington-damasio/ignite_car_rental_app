@@ -7,6 +7,12 @@ import { IUsersRepository } from "../../modules/accounts/repositories/interfaces
 import { UsersRepository } from "../../modules/accounts/infra/typeorm/repositories/UsersRepository";
 import { ICarsRepository } from "../../modules/cars/repositories/interfaces/ICarsRepository";
 import { CarsRepository } from "../../modules/cars/infra/typeorm/repositories/CarsRepository";
+import { ICarImagesRepository } from "../../modules/cars/repositories/interfaces/ICarImagesRepository";
+import { CarImagesRepository } from "../../modules/cars/infra/typeorm/repositories/CarImagesRepository";
+import { IRentalsRepository } from "../../modules/rentals/repositories/interfaces/IRentalsRepository";
+import { RentalsRepository } from "../../modules/rentals/infra/typeorm/repositories/RentalsRepository";
+
+import './providers'
 
 container.registerSingleton<ICategoriesRepository>(
   "CategoriesRepository",
@@ -26,4 +32,14 @@ container.registerSingleton<IUsersRepository>(
 container.registerSingleton<ICarsRepository>(
   "CarsRepository",
   CarsRepository
+)
+
+container.registerSingleton<ICarImagesRepository>(
+  "CarImagesRepository",
+  CarImagesRepository
+)
+
+container.registerSingleton<IRentalsRepository>(
+  "RentalsRepository",
+  RentalsRepository
 )
