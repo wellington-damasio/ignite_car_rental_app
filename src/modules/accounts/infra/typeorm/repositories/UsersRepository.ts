@@ -34,26 +34,16 @@ export class UsersRepository implements IUsersRepository {
       },
     });
 
-    if (!user) {
-      return false;
-    }
-
     return user;
   }
 
   async findById(id: string) {
-    try {
-      const user = await this.repository.findOne({
-        where: {
-          id,
-        },
-      });
-
-      if (user) {
-        return user;
+    const user = await this.repository.findOne({
+      where: {
+        id
       }
-    } catch (e) {
-      return false;
-    }
+    })
+
+    return user
   }
 }

@@ -9,7 +9,7 @@ import ensureAdmin from "../middlewares/ensureAdmin";
 import uploadConfig from "../../../../config/upload";
 
 const carsRoutes = Router()
-const uploadCarImage = multer(uploadConfig.upload(".tmp/cars"))
+const uploadCarImage = multer(uploadConfig.upload("./tmp/cars"))
 
 const createCarController = new CreateCarController()
 const listAvailableCarsController = new ListAvailableCarsController()

@@ -3,6 +3,9 @@ import { inject, injectable } from "tsyringe";
 import { IUsersRepository } from "../../repositories/interfaces/IUsersRepository";
 import { sign } from "jsonwebtoken";
 import { AppError } from "../../../../shared/errors/AppError";
+import { IUsersTokensRepository } from "../../repositories/interfaces/IUsersTokensRepository";
+import auth from "../../../../config/auth";
+import { IDateProvider } from "../../../../shared/container/providers/DateProvider/IDateProvider";
 
 interface IRequest {
   email: string;
@@ -15,12 +18,15 @@ interface IResponse {
     email: string;
   };
   token: string;
+  refresh_token: string
 }
 
 @injectable()
 export class AuthenticateUserUseCase {
   constructor(
-    @inject("UsersRepository") private usersRepository: IUsersRepository
+    @inject("UsersRepository") private usersRepository: IUsersRepository,
+    @inject("UsersTokensRepository") private usersTokensRepository: IUsersTokensRepository,
+    @inject("DayjsDateProvider") private dateProvider: IDateProvider
   ) { }
 
   async execute({ email, password }: IRequest): Promise<IResponse | false> {
@@ -35,10 +41,23 @@ export class AuthenticateUserUseCase {
     }
 
     // Generate JWT
-    const token = sign({}, "4c65c7b701a100c3e9ecbc09964403da", {
+    const token = sign({}, auth.secret_token, {
       subject: user.id,
-      expiresIn: "1d",
+      expiresIn: auth.expires_in_token,
     });
+
+    const refresh_token = sign({email}, auth.secret_refresh_token, {
+      subject: user.id,
+      expiresIn: auth.expires_in_refresh_token
+    })
+
+    const refreshTokenExpiresDate = this.dateProvider.addDays(auth.expires_refresh_token_days)
+
+    await this.usersTokensRepository.create({
+      user_id: user.id,
+      refresh_token,
+      expires_date: refreshTokenExpiresDate
+    })
 
     const tokenReturn: IResponse = {
       token,
@@ -46,6 +65,7 @@ export class AuthenticateUserUseCase {
         name: user.name,
         email: user.email,
       },
+      refresh_token
     };
 
     return tokenReturn;

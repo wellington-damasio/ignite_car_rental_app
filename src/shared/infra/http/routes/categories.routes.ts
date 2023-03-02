@@ -4,6 +4,7 @@ import { CreateCategoryController } from "../../../../modules/cars/useCases/crea
 import { FindCategoryByIdController } from "../../../../modules/cars/useCases/findCategoryById/findCategoryByIdController";
 import { ImportCategoryController } from "../../../../modules/cars/useCases/importCategory/importCategoryController";
 import { ListCategoriesController } from "../../../../modules/cars/useCases/listCategories/ListCategoriesController";
+import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 
 const categoriesRoutes = Router();
 const upload = multer({ dest: "./tmp" });
@@ -12,19 +13,19 @@ const upload = multer({ dest: "./tmp" });
 //              List all categories
 // ---------------------------------------------
 const listCategoriesController = new ListCategoriesController();
-categoriesRoutes.get("/", listCategoriesController.handle);
+categoriesRoutes.get("/", ensureAuthenticated, listCategoriesController.handle);
 
 // ---------------------------------------------
 //            Create a new category
 // ---------------------------------------------
 const createCategoryController = new CreateCategoryController();
-categoriesRoutes.post("/", createCategoryController.handle);
+categoriesRoutes.post("/", ensureAuthenticated, createCategoryController.handle);
 
 // ---------------------------------------------
 //         Return a specific category (id)
 // ---------------------------------------------
 const findCategoryByIdController = new FindCategoryByIdController();
-categoriesRoutes.get("/:id", findCategoryByIdController.handle);
+categoriesRoutes.get("/:id", ensureAuthenticated, findCategoryByIdController.handle);
 
 // ---------------------------------------------
 //      Upload categories from a CSV file
@@ -32,6 +33,7 @@ categoriesRoutes.get("/:id", findCategoryByIdController.handle);
 const importCategoryController = new ImportCategoryController();
 categoriesRoutes.post(
   "/import",
+  ensureAuthenticated,
   upload.single("file"),
   importCategoryController.handle
 );

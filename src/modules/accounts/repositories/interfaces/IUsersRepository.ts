@@ -12,6 +12,6 @@ export interface ICreateUserDTO {
 export interface IUsersRepository {
   create: (data: ICreateUserDTO) => Promise<void>;
   list: () => Promise<User[]>;
-  findByEmail: (email: string) => Promise<User | false>;
-  findById: (id: string) => Promise<User | false>;
+  findByEmail: (email: string) => Promise<User>;
+  findById: (id: string) => Promise<User>;
 }

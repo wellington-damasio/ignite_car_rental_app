@@ -13,12 +13,12 @@ class UsersRepositoryInMemory implements IUsersRepository {
   async list(): Promise<User[]> {
     return this.users
   }
-  async findByEmail(email: string): Promise<false | User> {
+  async findByEmail(email: string): Promise<User> {
     const user = this.users.find(user => user.email === email)
     return user
   }
 
-  async findById(id: string): Promise<false | User> {
+  async findById(id: string): Promise<User> {
     const user = this.users.find(user => user.id === id)
     return user
   }
